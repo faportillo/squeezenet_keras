@@ -75,24 +75,24 @@ def preprocess_image(image_path):
 	"""
 	IMAGENET_MEAN = [123.68, 116.779, 103.939] # rgb format
 
-	img = Image.open(image_path).convert('RGB')
-  	'''img = cv2.imread(image_path)
-	img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)'''
+	#img = Image.open(image_path).convert('RGB')
+  	img = cv2.imread(image_path)
+	img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
 	# resize of the image (setting lowest dimension to 256px)
-	if img.size[0] < img.size[1]:
-		h = int(float(256 * img.size[1]) / img.size[0])
-		img = img.resize((256, h), Image.ANTIALIAS)
-	    #	img = cv2.resize(img,(256,h))
+	if img.shape[0] < img.shape[1]:
+		h = int(float(256 * img.shape[1]) / img.shape[0])
+		# img = img.resize((256, h), Image.ANTIALIAS)
+    	img = cv2.resize(img,(256,h))
 	else:
-		w = int(float(256 * img.size[0]) / img.size[1])
-		#img = cv2.resize(img,(w,256))
-		img = img.resize((w, 256), Image.ANTIALIAS)
+		w = int(float(256 * img.shape[0]) / img.shape[1])
+		img = cv2.resize(img,(w,256))
+		# img = img.resize((w, 256), Image.ANTIALIAS)
 
 	# random 227x227 patch
-	x = random.randint(0, img.size[0] - 227)
-	y = random.randint(0, img.size[1] - 227)
-	img_cropped = img.crop((x, y, x + 227, y + 227))
-	#img_cropped = img[y:y+227,x:x+227]
+	x = random.randint(0, img.shape[0] - 227)
+	y = random.randint(0, img.shape[1] - 227)
+	#img_cropped = img.crop((x, y, x + 227, y + 227))
+	img_cropped = img[y:y+227,x:x+227]
 
 	cropped_im_array = np.array(img_cropped, dtype=np.float32)
 

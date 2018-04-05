@@ -23,9 +23,9 @@ import random
 import train_utils as tu
 
 #Hyperparameters
-batch_size = 128
+batch_size = 1024
 num_classes = 1000
-epochs = 5
+epochs = 170000
 
 
 def _fire(x, filters, name="fire"):
@@ -49,7 +49,7 @@ def SqueezeNet(include_top=True, weights=None, input_tensor=None, input_shape=No
                          ' as true, `classes` should be 1000')
     # Determine proper input shape
     input_shape = _obtain_input_shape(input_shape,
-                                      default_size=224,
+                                      default_size=227,
                                       min_size=48,
                                       data_format=K.image_data_format(),
                                       require_flatten=include_top)
@@ -119,7 +119,7 @@ def train_model(model):
   
         for i in range(0, epochs):
           current_index = 0
-        
+          print('Epoch: '+str(i))
           while current_index + batch_size < (ts_size):
             start_time = time.time()
         
@@ -128,6 +128,7 @@ def train_model(model):
             lab = np.stack(lab,axis=0)
             #print("IMG SHAPE: "+str(img.shape))
             loss, accuracy = model.train_on_batch(img, lab)
+            print('Loss: '+str(loss)+', Accuracy: '+str(accuracy))
             end_time = time.time()
             
         
